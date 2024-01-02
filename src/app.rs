@@ -4,7 +4,7 @@ use leptos_router::*;
 use leptos::html::Div;
 use leptos_use::core::Position;
 use leptos_use::{use_draggable_with_options, use_window, UseDraggableOptions, UseDraggableReturn};
-
+use crate::components::avatar::*;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -51,6 +51,7 @@ fn HomePage() -> impl IntoView {
             <div class="text-center font-robotomono space-y-2">
                 <p class="text-center font-robotomono text-3xl">Welcome to Leptos!</p>
                 <p>Set up a client side rendered Leptos app with one command</p>
+                <Avatar></Avatar>
             </div>
             <div class="flex space-x-20 justify-center">
                 {LEPTOS_HELPFUL

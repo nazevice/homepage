@@ -1,0 +1,1 @@
+/home/nazevice/Documents/GitHub/homepage/target/wasm32-unknown-unknown/debug/homepage.wasm: /home/nazevice/Documents/GitHub/homepage/src/app.rs /home/nazevice/Documents/GitHub/homepage/src/components/avatar.rs /home/nazevice/Documents/GitHub/homepage/src/components/mod.rs /home/nazevice/Documents/GitHub/homepage/src/main.rs
