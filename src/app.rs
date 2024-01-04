@@ -1,15 +1,12 @@
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-use leptos::html::Div;
-use leptos_use::core::Position;
-use leptos_use::{use_draggable_with_options, use_window, UseDraggableOptions, UseDraggableReturn};
-use crate::components::avatar::*;
+use crate::{components::avatar::*, blog_parser};
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
-
+    blog_parser::parse_post();
     view! {
         <Stylesheet id="leptos" href="/pkg/homepage.css"/>
 

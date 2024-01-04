@@ -1,0 +1,13 @@
+/home/nazevice/Documents/GitHub/homepage/target/debug/deps/libtoml-a5c3bc1877bcd0da.rmeta: /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/lib.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/map.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/value.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/datetime.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/ser.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/de.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/tokens.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/macros.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/spanned.rs
+
+/home/nazevice/Documents/GitHub/homepage/target/debug/deps/toml-a5c3bc1877bcd0da.d: /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/lib.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/map.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/value.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/datetime.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/ser.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/de.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/tokens.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/macros.rs /home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/spanned.rs
+
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/lib.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/map.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/value.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/datetime.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/ser.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/de.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/tokens.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/macros.rs:
+/home/nazevice/.cargo/registry/src/index.crates.io-6f17d22bba15001f/toml-0.5.11/src/spanned.rs:
