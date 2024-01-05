@@ -8,6 +8,7 @@ pub fn Avatar() -> impl IntoView {
             <div class="flex flex-col justify-center px-4 py-2">
                 <span class="font-semibold text-lg text-gray-800">Robert Kommeter</span>
                 <span class="text-sm text-gray-500">Software engineer</span>
+                <h2>Test</h2> 
             </div>
         </div>
     }
