@@ -1,7 +1,7 @@
 use leptos::*;
-use crate::blog_parser::parse_post;
+use crate::blog_parser::get_posts;
 
 #[component]
 pub fn BlogPost() -> impl IntoView {
-    view! { <div class="prose max-w-none" inner_html=parse_post()></div> }
+    view! { <div class="prose max-w-none" inner_html="<div>test</div>"></div> }
 }
