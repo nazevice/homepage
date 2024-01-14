@@ -25,55 +25,50 @@ fn read_markdown_file(file_path: &str) -> io::Result<String> {
     fs::read_to_string(file_path)
 }
 
-#[server(GetPosts, "/api")]
-pub async fn get_posts() -> Result<PostData, ServerFnError> {
-    let file_path: &str = "public/blog/test.md";
-    let matter: Matter<YAML> = Matter::<YAML>::new();
+#[server(GetPosts, "/api", "GetJson")]
+pub async fn get_posts() -> Result<Vec<PostData>, ServerFnError> {
+    let directory = "public/blog/";
+    let mut posts = Vec::new(); // Declare 'posts' as mutable
+
+    for entry in fs::read_dir(directory)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_file() {
+            logging::log!("{:?}", path);
+            if let Some(path_str) = path.to_str() {
+                match create_post(path_str) {
+                    Ok(post) => posts.push(post), // Now you can push to 'posts' since it's mutable
+                    Err(e) => return Err(ServerFnError::ServerError(e.to_string())),
+                }
+            } else {
+                return Err(ServerFnError::ServerError("Invalid UTF-8 path".to_string()));
+            }
+        }
+    }
+    Ok(posts)
+}
+
+fn create_post(file_path: &str) -> Result<PostData, String> {
     match read_markdown_file(file_path) {
         Ok(contents) => {
+            let matter: Matter<YAML> = Matter::<YAML>::new();
             let result: ParsedEntity = matter.parse(&contents);
-            let result_with_struct: ParsedEntityStruct<PostMetadata> = matter
-                .parse_with_struct::<PostMetadata>(&contents)
-                .unwrap();
-            logging::log!("{:?}", result_with_struct.data);
-            logging::log!("{:?}", result.content);
-            let options = Options::all();
-            let parser = Parser::new_ext(&result.content, options);
+            let result_with_struct: ParsedEntityStruct<PostMetadata> =
+                matter.parse_with_struct::<PostMetadata>(&contents).unwrap();
+            let options: Options = Options::all();
+            let parser: Parser<'_, '_> = Parser::new_ext(&result.content, options);
             let mut html_output = String::new();
             html::push_html(&mut html_output, parser);
             logging::log!("{:?}", html_output);
-            let post: PostData = PostData{ metadata: result_with_struct.data, content: html_output};
+            let post: PostData = PostData {
+                metadata: result_with_struct.data,
+                content: html_output,
+            };
             Ok(post)
         }
         Err(e) => {
             eprintln!("Error reading file: {}", e);
-            Err(ServerFnError::ServerError("Could not extract method and query...".to_string()))
+            Err(e.to_string())
         }
     }
-}
-
-pub fn parse_post() -> String {
-    /*
-    logging::log!("parse");
-    const MARKDOWN_CONTENT: &str = include_str!("../blog/test.md");
-    let matter = Matter::<YAML>::new();
-    let result: ParsedEntity = matter.parse(MARKDOWN_CONTENT);
-    let result_with_struct: ParsedEntityStruct<PostMetadata> = matter
-        .parse_with_struct::<PostMetadata>(MARKDOWN_CONTENT)
-        .unwrap();
-    logging::log!("{:?}", result_with_struct.data);
-    logging::log!("{:?}", result.content);
-    let options = Options::all();
-    let parser = Parser::new_ext(&result.content, options);
-
-    // Write to String buffer.
-    let mut html_output = String::new();
-    html::push_html(&mut html_output, parser);
-    logging::log!("{:?}", html_output);
-    html_output
-    
-     */
-    // Write to String buffer.
-    let mut html_output = String::new();
-    html_output
 }

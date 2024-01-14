@@ -32,7 +32,7 @@ pub fn App() -> impl IntoView {
         <Router>
             <Routes>
                 <Route path="/" view=HomePage/>
-                <Route path="/blog" view=Blog />
+                <Route path="/blog" view=Blog ssr=SsrMode::Async />
                 <Route path="/:else" view=ErrorPage/>
             </Routes>
         </Router>
@@ -52,19 +52,37 @@ fn HomePage() -> impl IntoView {
 
 #[component]
 fn Blog() -> impl IntoView {
-    let posts: Resource<(), Result<PostData, ServerFnError>> = create_resource(|| (), move|_| get_posts());
+    let posts: Resource<(), Result<Vec<PostData>, ServerFnError>> = create_local_resource(|| (), |_| async move { get_posts().await });
+    
     view! {
-    <div class="flex justify-center w-full">
-    <Suspense fallback=move || view! {<p>"Loading..."</p> }>
-    {move || match posts.get() {
-        None => view! { <p>"Loading..."</p> }.into_view(),
-        Some(Ok(data)) => view! { <div inner_html=&data.content></div> }.into_view(),
-        Some(Err(_)) => view! { <p>"Error loading posts"</p> }.into_view(),
-    }}
-    </Suspense>
-    </div>
-              <BlogPost></BlogPost>
-      }
+        <div class="flex justify-center w-full">
+            <Suspense>
+            {
+                match posts.get() {
+                    None => view! { <p>{ "Loading..." }</p> },
+                    Some(Ok(data)) => view! {
+                        <p>
+                        <ul>
+                            {
+                                data.into_iter().map(|post| {
+                                    view! {
+                                        <li>
+                                            <h2>{ &post.metadata.title }</h2>
+                                            <p>{ &post.content }</p>
+                                        </li>
+                                    }
+                                }).collect::<Vec<_>>()
+                            }
+                        </ul>
+                        </p>
+                    },
+                    Some(Err(_)) => view! { <p>{ "Error loading posts" }</p> },
+                }
+            }
+            </Suspense>
+            <BlogPost></BlogPost>
+        </div>
+    }
 }
 
 #[component]
