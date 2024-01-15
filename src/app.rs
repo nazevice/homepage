@@ -1,5 +1,5 @@
 use crate::blog_parser::{get_posts, PostData};
-use crate::{components::avatar::*, components::blog_post::*};
+use crate::{components::avatar::*, components::blog_post::*, components::blog_preview::*};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
@@ -52,8 +52,9 @@ fn HomePage() -> impl IntoView {
 
 #[component]
 fn Blog() -> impl IntoView {
-    let posts: Resource<(), Result<Vec<PostData>, ServerFnError>> = create_local_resource(|| (), |_| async move { get_posts().await });
-    
+    let posts: Resource<(), Result<Vec<PostData>, ServerFnError>> =
+        create_local_resource(|| (), |_| async move { get_posts().await });
+
     view! {
         <div class="flex justify-center w-full">
             <Suspense>
@@ -67,8 +68,7 @@ fn Blog() -> impl IntoView {
                                 data.into_iter().map(|post| {
                                     view! {
                                         <li>
-                                            <h2>{ &post.metadata.title }</h2>
-                                            <p>{ &post.content }</p>
+                                            <BlogPreview metadata=post.metadata></BlogPreview>
                                         </li>
                                     }
                                 }).collect::<Vec<_>>()

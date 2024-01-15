@@ -37,7 +37,7 @@ pub async fn get_posts() -> Result<Vec<PostData>, ServerFnError> {
             logging::log!("{:?}", path);
             if let Some(path_str) = path.to_str() {
                 match create_post(path_str) {
-                    Ok(post) => posts.push(post), // Now you can push to 'posts' since it's mutable
+                    Ok(post) => posts.push(post),
                     Err(e) => return Err(ServerFnError::ServerError(e.to_string())),
                 }
             } else {
