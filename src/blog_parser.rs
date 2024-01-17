@@ -17,6 +17,7 @@ pub struct PostMetadata {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct PostData {
+    pub id: u16,
     pub metadata: PostMetadata,
     pub content: String,
 }
@@ -29,6 +30,7 @@ fn read_markdown_file(file_path: &str) -> io::Result<String> {
 pub async fn get_posts() -> Result<Vec<PostData>, ServerFnError> {
     let directory = "public/blog/";
     let mut posts = Vec::new(); // Declare 'posts' as mutable
+    let index = 0;
 
     for entry in fs::read_dir(directory)? {
         let entry = entry?;
@@ -36,7 +38,7 @@ pub async fn get_posts() -> Result<Vec<PostData>, ServerFnError> {
         if path.is_file() {
             logging::log!("{:?}", path);
             if let Some(path_str) = path.to_str() {
-                match create_post(path_str) {
+                match create_post(path_str, index) {
                     Ok(post) => posts.push(post),
                     Err(e) => return Err(ServerFnError::ServerError(e.to_string())),
                 }
@@ -48,7 +50,7 @@ pub async fn get_posts() -> Result<Vec<PostData>, ServerFnError> {
     Ok(posts)
 }
 
-fn create_post(file_path: &str) -> Result<PostData, String> {
+fn create_post(file_path: &str, index: u16) -> Result<PostData, String> {
     match read_markdown_file(file_path) {
         Ok(contents) => {
             let matter: Matter<YAML> = Matter::<YAML>::new();
@@ -61,6 +63,7 @@ fn create_post(file_path: &str) -> Result<PostData, String> {
             html::push_html(&mut html_output, parser);
             logging::log!("{:?}", html_output);
             let post: PostData = PostData {
+                id: index,
                 metadata: result_with_struct.data,
                 content: html_output,
             };

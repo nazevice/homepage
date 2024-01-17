@@ -34,6 +34,7 @@ pub fn App() -> impl IntoView {
                 <Route path="/" view=HomePage/>
                 <Route path="/blog" view=Blog ssr=SsrMode::Async />
                 <Route path="/:else" view=ErrorPage/>
+                <Route path="/post/:id" view={BlogPost} />
             </Routes>
         </Router>
         </main>
@@ -68,7 +69,7 @@ fn Blog() -> impl IntoView {
                                 data.into_iter().map(|post| {
                                     view! {
                                         <li>
-                                            <BlogPreview metadata=post.metadata></BlogPreview>
+                                            <BlogPreview id=post.id metadata=post.metadata></BlogPreview>
                                         </li>
                                     }
                                 }).collect::<Vec<_>>()
@@ -80,7 +81,6 @@ fn Blog() -> impl IntoView {
                 }
             }
             </Suspense>
-            <BlogPost></BlogPost>
         </div>
     }
 }
