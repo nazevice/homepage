@@ -6,7 +6,9 @@ use leptos_router::*;
 
 #[component]
 pub fn App() -> impl IntoView {
-    //let (posts, set_posts) = create_signal("");
+    let posts: Resource<(), Result<Vec<PostData>, ServerFnError>> =
+        create_local_resource(|| (), |_| async move { get_posts().await });
+    provide_context(posts);
     provide_meta_context();
 
     view! {
@@ -34,7 +36,7 @@ pub fn App() -> impl IntoView {
                 <Route path="/" view=HomePage/>
                 <Route path="/blog" view=Blog ssr=SsrMode::Async />
                 <Route path="/:else" view=ErrorPage/>
-                <Route path="/post/:id" view={BlogPost} />
+                <Route path="/post/:id" view=BlogPost />
             </Routes>
         </Router>
         </main>
@@ -47,15 +49,13 @@ fn HomePage() -> impl IntoView {
     <div class="flex justify-center w-full">
       <Avatar></Avatar>
     </div>
-              <BlogPost></BlogPost>
       }
 }
 
 #[component]
 fn Blog() -> impl IntoView {
-    let posts: Resource<(), Result<Vec<PostData>, ServerFnError>> =
-        create_local_resource(|| (), |_| async move { get_posts().await });
-
+    let posts = use_context::<Resource<(), Result<Vec<PostData>, ServerFnError>>>()
+        .expect("Unable to load posts");
     view! {
         <div class="flex justify-center w-full">
             <Suspense>

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::fs::{self, metadata};
 use std::io;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(PartialEq, Serialize, Deserialize, Debug, Clone)]
 pub struct PostMetadata {
     pub title: String,
     pub description: String,
@@ -15,7 +15,7 @@ pub struct PostMetadata {
     pub thumbnail_path: String,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(PartialEq, Serialize, Deserialize, Clone, Debug)]
 pub struct PostData {
     pub id: u16,
     pub metadata: PostMetadata,
@@ -29,7 +29,7 @@ fn read_markdown_file(file_path: &str) -> io::Result<String> {
 #[server(GetPosts, "/api", "GetJson")]
 pub async fn get_posts() -> Result<Vec<PostData>, ServerFnError> {
     let directory = "public/blog/";
-    let mut posts = Vec::new(); // Declare 'posts' as mutable
+    let mut posts = Vec::new();
     let index = 0;
 
     for entry in fs::read_dir(directory)? {
