@@ -2,6 +2,7 @@ use app::*;
 use leptos::*;
 
 pub mod components;
+pub mod routes;
 pub mod app;
 pub mod blog_parser;
 

@@ -1,4 +1,5 @@
 use crate::blog_parser::{get_posts, PostData};
+use crate::routes::about::About;
 use crate::{components::avatar::*, components::blog_post::*, components::blog_preview::*};
 use leptos::*;
 use leptos_meta::*;
@@ -28,14 +29,15 @@ pub fn App() -> impl IntoView {
             <div class="space-x-4">
                 <a href="/blog">Blog</a>
                 <a href="#">Projects</a>
-                <a href="#">About</a>
+                <a href="/about">About</a>
             </div>
         </nav>
         <Router>
             <Routes>
-                <Route path="/" view=HomePage/>
+                <Route path="/" view=HomePage />
                 <Route path="/blog" view=Blog ssr=SsrMode::Async />
-                <Route path="/:else" view=ErrorPage/>
+                <Route path="/about" view=About />
+                <Route path="/:else" view=ErrorPage />
                 <Route path="/post/:id" view=BlogPost />
             </Routes>
         </Router>

@@ -36,7 +36,6 @@ pub async fn get_posts() -> Result<Vec<PostData>, ServerFnError> {
         let entry = entry?;
         let path = entry.path();
         if path.is_file() {
-            logging::log!("{:?}", path);
             if let Some(path_str) = path.to_str() {
                 match create_post(path_str, index) {
                     Ok(post) => posts.push(post),
@@ -61,7 +60,6 @@ fn create_post(file_path: &str, index: u16) -> Result<PostData, String> {
             let parser: Parser<'_, '_> = Parser::new_ext(&result.content, options);
             let mut html_output = String::new();
             html::push_html(&mut html_output, parser);
-            logging::log!("{:?}", html_output);
             let post: PostData = PostData {
                 id: index,
                 metadata: result_with_struct.data,

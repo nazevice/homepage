@@ -1,4 +1,5 @@
 pub mod components;
+pub mod routes;
 pub mod app;
 pub mod blog_parser;
 use cfg_if::cfg_if;
