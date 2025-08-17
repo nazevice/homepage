@@ -1,68 +1,191 @@
+
+
+import { useEffect, useRef } from 'react';
+import anime from 'animejs';
+
+function CenteredRiver() {
+  const riverRef = useRef<HTMLDivElement>(null);
+  const turbulenceRef = useRef<SVGFETurbulenceElement>(null);
+  const displacementRef = useRef<SVGFEDisplacementMapElement>(null);
+  const offsetRef = useRef<SVGFEOffsetElement>(null);
+
+  useEffect(() => {
+    if (turbulenceRef.current) {
+      anime({
+        targets: turbulenceRef.current,
+        baseFrequency: ['0.002 0.015', '0.002 0.025'],
+        duration: 20000,
+        easing: 'easeInOutSine',
+        direction: 'alternate',
+        loop: true,
+      });
+    }
+
+    if (offsetRef.current) {
+      anime({
+        targets: offsetRef.current,
+        dy: [0, 200],
+        duration: 15000,
+        easing: 'linear',
+        loop: true,
+      });
+    }
+
+    const paths = document.querySelectorAll('.river-path');
+    const baseWidths = [8, 6, 4, 7, 5, 3];
+
+    paths.forEach((path, index) => {
+      anime({
+        targets: path,
+        strokeWidth: [
+          { value: baseWidths[index] - 2, duration: 7000 + anime.random(0, 3000) },
+          { value: baseWidths[index] + 2, duration: 7000 + anime.random(0, 3000) }
+        ],
+        easing: 'easeInOutSine',
+        direction: 'alternate',
+        loop: true,
+        delay: anime.random(0, 1000)
+      });
+    });
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!riverRef.current || !displacementRef.current || !turbulenceRef.current) return;
+    
+    const rect = riverRef.current.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const centerX = rect.width / 2;
+    const distance = Math.abs(mouseX - centerX);
+    
+    if (distance < 250) {
+      const intensity = Math.max(0.1, 1 - (distance / 250));
+      
+      anime.remove([displacementRef.current, turbulenceRef.current]);
+
+      anime({
+        targets: displacementRef.current,
+        scale: 30 + intensity * 20,
+        duration: 800,
+        easing: 'easeOutQuart',
+      });
+      
+      anime({
+        targets: turbulenceRef.current,
+        baseFrequency: `${0.002 + intensity * 0.005} ${0.02 + intensity * 0.03}`,
+        duration: 800,
+        easing: 'easeOutQuart',
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!displacementRef.current || !turbulenceRef.current) return;
+    
+    anime.remove([displacementRef.current, turbulenceRef.current]);
+
+    anime({
+      targets: displacementRef.current,
+      scale: 30,
+      duration: 1500,
+      easing: 'easeOutElastic(1, .8)',
+    });
+
+    anime({
+      targets: turbulenceRef.current,
+      baseFrequency: '0.002 0.02',
+      duration: 1500,
+      easing: 'easeOutElastic(1, .8)',
+    });
+  };
+
+  return (
+    <div ref={riverRef} className="flowing-river right-side" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+      <div className="river-container">
+        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 1000">
+          <defs>
+            <filter id="riverTexture">
+              <feTurbulence ref={turbulenceRef} baseFrequency="0.002 0.02" numOctaves="1" seed="2" type="fractalNoise" result="turbulence" />
+              <feOffset ref={offsetRef} in="turbulence" dy="0" result="offsetTurbulence" />
+              <feDisplacementMap ref={displacementRef} in="SourceGraphic" in2="offsetTurbulence" scale="30" />
+              <feGaussianBlur stdDeviation="1.5" />
+            </filter>
+            <mask id="riverMask">
+              <rect width="800" height="1000" fill="black"/>
+              <rect x="0" y="0" width="800" height="1000" fill="white"/>
+            </mask>
+          </defs>
+          <g filter="url(#riverTexture)">
+            <image id="koi-1" className="koi-fish" href="/koi.png" width="100" height="100" x="400" y="200" transform="rotate(180 0 0)" />
+            <image id="koi-2" className="koi-fish" href="/koi.png" width="100" height="100" x="670" y="700" transform="rotate(10 0 0)" />
+          </g>
+          
+          <g mask="url(#riverMask)" filter="url(#riverTexture)">
+            <path 
+              className="river-path"
+              d="M 595 -50 Q 300 250 550 500 Q 850 750 595 1050"
+            />
+            <path 
+              className="river-path"
+              d="M 605 -50 Q 350 250 650 500 Q 900 750 605 1050"
+            />
+            <path 
+              className="river-path"
+              d="M 598 -50 Q 250 250 570 500 Q 950 750 598 1050"
+            />
+            <path 
+              className="river-path"
+              d="M 602 -50 Q 400 250 630 500 Q 800 750 602 1050"
+            />
+            <path 
+              className="river-path"
+              d="M 599 -50 Q 320 250 590 500 Q 880 750 599 1050"
+            />
+            <path 
+              className="river-path"
+              d="M 601 -50 Q 380 250 610 500 Q 820 750 601 1050"
+            />
+      </g>
+    </svg>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-red-50">
-      <div className="absolute inset-0 opacity-5 bg-repeat" 
-           style={{
-             backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0v40M0 20h40' stroke='%2315803d' stroke-width='1' fill='none'/%3E%3C/svg%3E")`
-           }}>
-      </div>
+    <div className="min-h-screen bg-gray-950">
+      <CenteredRiver />
       
       <div className="relative z-10">
-        <header className="container mx-auto px-4 pt-12 pb-8">
-          <nav className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-red-700">
-              🐼 Robert Kommeter
-            </div>
-            <div className="hidden md:flex space-x-8 text-green-700 font-medium">
-              <a href="#about" className="hover:text-red-600 transition-colors">About</a>
-              <a href="#projects" className="hover:text-red-600 transition-colors">Projects</a>
-              <a href="#blog" className="hover:text-red-600 transition-colors">Blog</a>
-              <a href="#contact" className="hover:text-red-600 transition-colors">Contact</a>
-            </div>
-          </nav>
-        </header>
         <main className="container mx-auto px-4 py-16">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="text-8xl md:text-9xl mb-8 animate-bounce">
-              🐼
-            </div>
+          <div className="text-left max-w-2xl">
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gray-800">
-              Robert Kommeter
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-4 text-white leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              Robert<br/>Kommeter
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
-              Developer • Creator • Panda Enthusiast
-            </p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-8 text-red-400 leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              Full Stack Software Engineer
+            </h2>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <button className="px-8 py-3 bg-red-600 text-white rounded-full font-medium hover:bg-red-700 transition-all transform hover:scale-105 shadow-lg">
-                View My Work
-              </button>
-              <button className="px-8 py-3 border-2 border-green-600 text-green-700 rounded-full font-medium hover:bg-green-600 hover:text-white transition-all transform hover:scale-105">
-                Get In Touch
-              </button>
+            <div className="flex justify-start space-x-6 mb-6">
+              <a href="https://github.com/nazevice" className="text-gray-500 hover:text-red-400 transition-colors text-lg">
+                GitHub
+              </a>
+              <a href="https://www.linkedin.com/in/robertkommeter/" className="text-gray-500 hover:text-red-400 transition-colors text-lg">
+                LinkedIn
+              </a>
+              <a href="mailto:hello@kommeterr.dev" className="text-gray-500 hover:text-red-400 transition-colors text-lg">
+                hello@kommeterr.dev
+              </a>
             </div>
+            
+
+            
           </div>
         </main>
-        <footer className="container mx-auto px-4 py-12 text-center">
-          <div className="flex justify-center space-x-6 mb-6">
-            <a href="#" className="text-green-600 hover:text-red-600 transition-colors text-2xl">
-              🐙
-            </a>
-            <a href="#" className="text-green-600 hover:text-red-600 transition-colors text-2xl">
-              💼
-            </a>
-            <a href="#" className="text-green-600 hover:text-red-600 transition-colors text-2xl">
-              🐦
-            </a>
-          </div>
-          <div className="flex justify-center items-center space-x-2 text-gray-600">
-            <span>Made with</span>
-            <span className="text-red-500 text-xl">❤️</span>
-            <span>and</span>
-            <span className="text-green-500 text-xl">🎋</span>
-          </div>
+        <footer className="container mx-auto px-4 py-12">
+
         </footer>
       </div>
     </div>
