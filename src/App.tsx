@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import anime from 'animejs';
+import KatanaWithAura from './KatanaWithAura';
 
 function CenteredRiver() {
   const riverRef = useRef<HTMLDivElement>(null);
@@ -184,9 +185,11 @@ function App() {
             
           </div>
         </main>
-        <footer className="container mx-auto px-4 py-12">
-
-        </footer>
+        
+        <KatanaWithAura 
+          className="fixed left-8 z-20" 
+          style={{ bottom: '-10px' }}
+        />
       </div>
     </div>
   )
