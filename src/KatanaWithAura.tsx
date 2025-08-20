@@ -22,7 +22,7 @@ interface ParticleProps {
   waveFrequency: number;
 }
 
-const PARTICLE_COUNT = 30;
+const PARTICLE_COUNT = 40;
 const CENTER_X = 256;
 const CENTER_Y = 400;
 const MIN_RADIUS = 100;
@@ -136,14 +136,14 @@ const KatanaWithAura: React.FC<KatanaWithAuraProps> = ({ className = '', style =
 
   return (
     <div className={`relative ${className}`} style={style}>
-      <img 
-        src="/katana.png" 
-        alt="Katana" 
-        className="opacity-80 hover:opacity-100 transition-opacity duration-300"
+      <img
+        src="/katana.png"
+        alt="Katana"
         style={{ width: '512px', height: '512px' }}
+        className="object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 blur-[1.5px]"
       />
       
-      <div className="absolute inset-0 pointer-events-none -z-10">
+      <div className="absolute inset-0 pointer-events-none z-10">
         {particles.map((p, i) => (
           <Particle key={i} particle={p} />
         ))}

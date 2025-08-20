@@ -1,7 +1,7 @@
 
 
 import { useEffect, useRef } from 'react';
-import anime from 'animejs';
+import * as anime from 'animejs';
 import KatanaWithAura from './KatanaWithAura';
 
 function CenteredRiver() {
@@ -52,15 +52,15 @@ function CenteredRiver() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!riverRef.current || !displacementRef.current || !turbulenceRef.current) return;
-    
+
     const rect = riverRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const centerX = rect.width / 2;
     const distance = Math.abs(mouseX - centerX);
-    
+
     if (distance < 250) {
       const intensity = Math.max(0.1, 1 - (distance / 250));
-      
+
       anime.remove([displacementRef.current, turbulenceRef.current]);
 
       anime({
@@ -69,7 +69,7 @@ function CenteredRiver() {
         duration: 800,
         easing: 'easeOutQuart',
       });
-      
+
       anime({
         targets: turbulenceRef.current,
         baseFrequency: `${0.002 + intensity * 0.005} ${0.02 + intensity * 0.03}`,
@@ -81,7 +81,7 @@ function CenteredRiver() {
 
   const handleMouseLeave = () => {
     if (!displacementRef.current || !turbulenceRef.current) return;
-    
+
     anime.remove([displacementRef.current, turbulenceRef.current]);
 
     anime({
@@ -111,42 +111,42 @@ function CenteredRiver() {
               <feGaussianBlur stdDeviation="1.5" />
             </filter>
             <mask id="riverMask">
-              <rect width="800" height="1000" fill="black"/>
-              <rect x="0" y="0" width="800" height="1000" fill="white"/>
+              <rect width="800" height="1000" fill="black" />
+              <rect x="0" y="0" width="800" height="1000" fill="white" />
             </mask>
           </defs>
           <g filter="url(#riverTexture)">
             <image id="koi-1" className="koi-fish" href="/koi.png" width="100" height="100" x="400" y="200" transform="rotate(180 0 0)" />
             <image id="koi-2" className="koi-fish" href="/koi.png" width="100" height="100" x="670" y="700" transform="rotate(10 0 0)" />
           </g>
-          
+
           <g mask="url(#riverMask)" filter="url(#riverTexture)">
-            <path 
+            <path
               className="river-path"
               d="M 595 -50 Q 300 250 550 500 Q 850 750 595 1050"
             />
-            <path 
+            <path
               className="river-path"
               d="M 605 -50 Q 350 250 650 500 Q 900 750 605 1050"
             />
-            <path 
+            <path
               className="river-path"
               d="M 598 -50 Q 250 250 570 500 Q 950 750 598 1050"
             />
-            <path 
+            <path
               className="river-path"
               d="M 602 -50 Q 400 250 630 500 Q 800 750 602 1050"
             />
-            <path 
+            <path
               className="river-path"
               d="M 599 -50 Q 320 250 590 500 Q 880 750 599 1050"
             />
-            <path 
+            <path
               className="river-path"
               d="M 601 -50 Q 380 250 610 500 Q 820 750 601 1050"
             />
-      </g>
-    </svg>
+          </g>
+        </svg>
       </div>
     </div>
   );
@@ -154,42 +154,34 @@ function CenteredRiver() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="h-screen w-screen bg-gray-950 overflow-hidden">
       <CenteredRiver />
-      
-      <div className="relative z-10">
-        <main className="container mx-auto px-4 py-16">
-          <div className="text-left max-w-2xl">
-            
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-4 text-white leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              Robert<br/>Kommeter
-            </h1>
-            
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-8 text-red-400 leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              Full Stack Software Engineer
-            </h2>
-            
-            <div className="flex justify-start space-x-6 mb-6">
-              <a href="https://github.com/nazevice" className="text-gray-500 hover:text-red-400 transition-colors text-lg">
-                GitHub
-              </a>
-              <a href="https://www.linkedin.com/in/robertkommeter/" className="text-gray-500 hover:text-red-400 transition-colors text-lg">
-                LinkedIn
-              </a>
-              <a href="mailto:hello@kommeterr.dev" className="text-gray-500 hover:text-red-400 transition-colors text-lg">
-                hello@kommeterr.dev
-              </a>
-            </div>
-            
 
-            
+      <div className="absolute inset-0 flex items-center justify-center">
+        <main className="container mx-auto px-4 sm:px-8 lg:px-16">
+          <div className="text-left max-w-2xl absolute z-20">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-4 text-white leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                Robert<br />Kommeter
+              </h1>
+
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-8 text-red-700 leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
+                Full Stack Software Engineer
+              </h2>
+
+              <div className="flex flex-col sm:flex-row sm:justify-start space-y-2 sm:space-y-0 sm:space-x-6 mb-6">
+                <a href="https://github.com/nazevice" className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg">
+                  GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/robertkommeter/" className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg">
+                  LinkedIn
+                </a>
+                <a href="mailto:hello@kommeterr.dev" className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg">
+                  hello@kommeterr.dev
+                </a>
+              </div>
           </div>
+          <KatanaWithAura />
         </main>
-        
-        <KatanaWithAura 
-          className="fixed left-8 z-20" 
-          style={{ bottom: '-10px' }}
-        />
       </div>
     </div>
   )
