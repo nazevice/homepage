@@ -13,5 +13,9 @@ export default defineConfig({
     alias: {
       'animejs': path.resolve(__dirname, 'node_modules/animejs/lib/anime.es.js')
     }
+  },
+  server: {
+    host: true,
+    port: 5173
   }
 })
