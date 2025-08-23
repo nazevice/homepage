@@ -16,8 +16,45 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        VITE_UMAMI_DOMAIN: ${VITE_UMAMI_DOMAIN:-http://localhost:3000}
+        VITE_UMAMI_WEBSITE_ID: ${VITE_UMAMI_WEBSITE_ID:-}
     ports:
       - "8080:80"
     environment:
       - NODE_ENV=production
     restart: unless-stopped
+
+  umami_db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-umami}
+      POSTGRES_USER: ${POSTGRES_USER:-umami}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-umami}
+    volumes:
+      - umami_data:/var/lib/postgresql/data
+    networks:
+      - umami
+    restart: unless-stopped
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-umami}:${POSTGRES_PASSWORD:-umami}@umami_db:5432/${POSTGRES_DB:-umami}
+      DATABASE_TYPE: postgresql
+      UMAMI_ADMIN_PASSWORD: ${UMAMI_ADMIN_PASSWORD:-changeme123}
+      UMAMI_ADMIN_EMAIL: ${UMAMI_ADMIN_EMAIL:-admin@kommeterr.dev}
+    ports:
+      - "3000:3000"
+    networks:
+      - umami
+    depends_on:
+      - umami_db
+    restart: unless-stopped
+
+volumes:
+  umami_data:
+
+networks:
+  umami:
+    driver: bridge

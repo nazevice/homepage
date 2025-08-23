@@ -1,11 +1,17 @@
 
 
+import { useEffect } from 'react';
 import River from './River';
 import KatanaWithAura from './KatanaWithAura';
+import { initUmami, trackSocialLink, trackEmailClick } from './umami';
 
 
 
 function App() {
+  useEffect(() => {
+    initUmami();
+  }, []);
+
   return (
     <div className="h-screen w-screen bg-gray-950 overflow-hidden">
       <River />
@@ -22,13 +28,25 @@ function App() {
               </h2>
 
               <div className="flex flex-col sm:flex-row sm:justify-start space-y-2 sm:space-y-0 sm:space-x-6 mb-6">
-                <a href="https://github.com/nazevice" className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg">
+                <a
+                  href="https://github.com/nazevice"
+                  className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg"
+                  onClick={() => trackSocialLink('github')}
+                >
                   GitHub
                 </a>
-                <a href="https://www.linkedin.com/in/robertkommeter/" className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg">
+                <a
+                  href="https://www.linkedin.com/in/robertkommeter/"
+                  className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg"
+                  onClick={() => trackSocialLink('linkedin')}
+                >
                   LinkedIn
                 </a>
-                <a href="mailto:hello@kommeterr.dev" className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg">
+                <a
+                  href="mailto:hello@kommeterr.dev"
+                  className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg"
+                  onClick={trackEmailClick}
+                >
                   hello@kommeterr.dev
                 </a>
               </div>

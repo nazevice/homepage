@@ -28,6 +28,9 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
+        build-args: |
+          VITE_UMAMI_DOMAIN=${{ secrets.VITE_UMAMI_DOMAIN }}
+          VITE_UMAMI_WEBSITE_ID=${{ secrets.VITE_UMAMI_WEBSITE_ID }}
         tags: |
           ${{ secrets.DOCKER_HUB_USERNAME }}/homepage:latest
           ${{ secrets.DOCKER_HUB_USERNAME }}/homepage:${{ github.sha }}
@@ -45,22 +48,8 @@ jobs:
         host: ${{ secrets.VM_TAILSCALE_IP }}
         username: ${{ secrets.VM_USERNAME }}
         key: ${{ secrets.VM_SSH_KEY }}
-        port: ${{ secrets.VM_PORT || 22 }}
+        port: ${{ secrets.VM_PORT }}
         script: |
-          # Pull latest image
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/homepage:latest
-
-          # Stop existing container if running
-          docker stop homepage || true
-          docker rm homepage || true
-
-          # Start new container
-          docker run -d \
-            --name homepage \
-            --restart unless-stopped \
-            -p 80:80 \
-            -p 443:443 \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/homepage:latest
-
-          # Clean up old images
+          docker compose pull homepage
+          docker compose up -d
           docker image prune -f
