@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import River from './River';
 import KatanaWithAura from './KatanaWithAura';
-import { initUmami, trackSocialLink, trackEmailClick } from './umami';
+import { initUmami, trackSocialLink, trackEmailClick, handleLinkClick } from './umami';
 
 
 
@@ -31,21 +31,27 @@ function App() {
                 <a
                   href="https://github.com/nazevice"
                   className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg"
-                  onClick={() => trackSocialLink('github')}
+                  onClick={(e) => handleLinkClick(e, () => trackSocialLink('github'))}
+                  onContextMenu={(e) => handleLinkClick(e, () => trackSocialLink('github'))}
+                  onAuxClick={(e) => handleLinkClick(e, () => trackSocialLink('github'))}
                 >
                   GitHub
                 </a>
                 <a
                   href="https://www.linkedin.com/in/robertkommeter/"
                   className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg"
-                  onClick={() => trackSocialLink('linkedin')}
+                  onClick={(e) => handleLinkClick(e, () => trackSocialLink('linkedin'))}
+                  onContextMenu={(e) => handleLinkClick(e, () => trackSocialLink('linkedin'))}
+                  onAuxClick={(e) => handleLinkClick(e, () => trackSocialLink('linkedin'))}
                 >
                   LinkedIn
                 </a>
                 <a
                   href="mailto:hello@kommeterr.dev"
                   className="text-gray-200 hover:text-red-700 transition-colors text-base sm:text-lg"
-                  onClick={trackEmailClick}
+                  onClick={(e) => handleLinkClick(e, trackEmailClick)}
+                  onContextMenu={(e) => handleLinkClick(e, trackEmailClick)}
+                  onAuxClick={(e) => handleLinkClick(e, trackEmailClick)}
                 >
                   hello@kommeterr.dev
                 </a>
