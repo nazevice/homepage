@@ -9,14 +9,15 @@ declare global {
 
 export const initUmami = (websiteId?: string) => {
   if (typeof window !== 'undefined') {
-    const umamiDomain = import.meta.env.VITE_UMAMI_DOMAIN || 'http://localhost:3000';
-    const umamiWebsiteId = websiteId || import.meta.env.VITE_UMAMI_WEBSITE_ID || 'your-website-id';
+    const umamiDomain = import.meta.env.VITE_UMAMI_DOMAIN;
+    const umamiWebsiteId = websiteId || import.meta.env.VITE_UMAMI_WEBSITE_ID;
 
     const script = document.createElement('script');
     script.async = true;
     script.defer = true;
     script.src = `${umamiDomain}/script.js`;
     script.setAttribute('data-website-id', umamiWebsiteId);
+    script.onerror = () => console.error('Failed to load Umami script');
 
     const firstScript = document.getElementsByTagName('script')[0];
     if (firstScript && firstScript.parentNode) {
@@ -30,6 +31,8 @@ export const initUmami = (websiteId?: string) => {
 export const trackEvent = (event: string, data?: any) => {
   if (window.umami) {
     window.umami.track(event, data);
+  } else {
+    console.error('Umami not initialized');
   }
 };
 
