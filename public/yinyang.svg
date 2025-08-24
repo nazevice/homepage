@@ -1,0 +1,11 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Taijitu with site colors -->
+  <circle cx="16" cy="16" r="16" fill="#030712"/>
+  <path d="M16 0
+           A16 16 0 1 1 16 32
+           A8 8 0 1 0 16 16
+           A8 8 0 1 1 16 0
+           Z" fill="#dc2626"/>
+  <circle cx="16" cy="8" r="2.6667" fill="#030712"/>
+  <circle cx="16" cy="24" r="2.6667" fill="#dc2626"/>
+</svg>
