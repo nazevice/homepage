@@ -94,9 +94,19 @@ export const handleLinkClick = async (
   }
   if (isLeftClick) {
     event.preventDefault();
-    await trackingFunction();
+    const href = event.currentTarget.href;
+    
+    try {
+      await Promise.race([
+        trackingFunction(),
+        new Promise(resolve => setTimeout(resolve, 200))
+      ]);
+    } catch (error) {
+      console.error('Tracking failed:', error);
+    }
+    
     setTimeout(() => {
-      window.location.assign(event.currentTarget.href);
+      window.location.assign(href);
     }, NAVIGATION_DELAY_MS);
   }
 };
